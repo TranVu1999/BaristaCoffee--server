@@ -1,0 +1,33 @@
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+    "email": "tranvudpqn123@gmail.com",
+    "fullname": "Trần Vũ",
+    "password": "Admin123@"
+}
+
+###
+POST http://localhost:5000/api/auth/verify
+Content-Type: application/json
+
+{
+    "email": "tranleanhvudpqn123@gmail.com"
+}
+
+###
+POST http://localhost:5000/api/auth/check-username
+Content-Type: application/json
+
+{
+    "username": "tranvudpqn123@gmail.com"
+}
+
+###
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "tranleanhvudpqn123@gmail.com",
+    "password": "Admin123@"
+}
