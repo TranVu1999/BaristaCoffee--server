@@ -5,6 +5,10 @@ const jwt = require('jsonwebtoken')
 
 const Account = require('./../models/Account')
 const User = require('./../models/User')
+const ProductCommented = require('./../models/ProductCommented')
+const ProductFavorited = require('./../models/ProductFavorited')
+const ProductReaded = require('./../models/ProductReaded')
+const ProductSaveForLate = require('./../models/ProductSaveForLate')
 
 module.exports = {
     /**
@@ -33,8 +37,40 @@ module.exports = {
             }
 
             // all good
+            const user = await User.findOne({accountId: account._id})
+            
+            const productComments = await ProductCommented.find({
+                accountId: account._id
+            })
+            const productFavorites = await ProductFavorited.find({
+                accountId: account._id
+            })
+            const productReads = await ProductReaded.find({
+                accountId: account._id
+            })
+            const productSaveForLates = await ProductSaveForLate.find({
+                accountId: account._id
+            })
+
+            const accountInfo = {
+                username: account.username,
+                fullname: user.fullname,
+                phoneNumber: user.phoneNumber,
+                email: user.email,
+                gender: user.gender,
+                birthday: user.birthday,
+                productSaveForLates,
+                productReads,
+                productFavorites,
+                productComments
+            }
             const accessToken = jwt.sign({accountId: account._id}, process.env.ACCESS_TOKEN_SECRET)
-            res.json({success: true, message: "User logged successfully", accessToken})
+            res.json({
+                success: true, 
+                message: "User logged successfully", 
+                accessToken,
+                accountInfo
+            })
             
         } catch (error) {
             console.log(error)
