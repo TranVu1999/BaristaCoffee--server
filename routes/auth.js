@@ -15,6 +15,11 @@ router.post('/register', authController.register)
 // @access Public
 router.post('/login', authController.login)
 
+// @route POST api/auth/check-logged
+// @desc Check user is logged
+// @access Public
+router.post('/check-logged', authController.checkLogged)
+
 // @route POST api/auth/login
 // @desc Send verify code to email
 // @access Public

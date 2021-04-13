@@ -11,6 +11,7 @@ const ProductReaded = require('./../models/ProductReaded')
 const ProductSaveForLate = require('./../models/ProductSaveForLate')
 
 module.exports = {
+
     /**
      * Sign in for user
      */
@@ -64,6 +65,7 @@ module.exports = {
                 productFavorites,
                 productComments
             }
+
             const accessToken = jwt.sign({accountId: account._id}, process.env.ACCESS_TOKEN_SECRET)
             res.json({
                 success: true, 
@@ -80,6 +82,70 @@ module.exports = {
                 success: false,
                 message: "Internal server error"
             })
+        }
+    },
+
+    /**
+     * Check user is logged
+     */
+    checkLogged: async function(req, res){
+        const {accessToken} = req.body
+
+        if(!accessToken){
+            return res
+            .status(401)
+            .json({success: false, message: "Access token not found"})            
+        }
+
+        try {
+        
+            const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
+    
+            // Vì kết quả trả về chính là dữ liệu trong cái access token của nó nên có thể lấy dữ liệu thông qua cách này
+            const accountId = decoded.accountId;
+
+            const account = await Account.findOne({_id: accountId})
+
+            if(account){
+                const user = await User.findOne({accountId})
+                const productComments = await ProductCommented.find({accountId})
+                const productFavorites = await ProductFavorited.find({accountId})
+                const productReads = await ProductReaded.find({accountId})
+                const productSaveForLates = await ProductSaveForLate.find({accountId})
+
+                const accountInfo =  {
+                    username: account.username,
+                    fullname: user.fullname,
+                    phoneNumber: user.phoneNumber,
+                    email: user.email,
+                    gender: user.gender,
+                    birthday: user.birthday,
+                    productSaveForLates,
+                    productReads,
+                    productFavorites,
+                    productComments
+                }
+
+                return res.json({
+                    success: true, 
+                    message: "User is logged before", 
+                    accountInfo
+                })
+            }
+
+            res.json({
+                success: false, 
+                message: "Cannot find this account"
+            })
+
+            
+
+            
+        } catch (error) {
+            console.log(error);
+            return res
+            .status(403)
+            .json({success: false, message: "Invalid token"})
         }
     },
 
