@@ -1,32 +1,45 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const AccountSchema = new Schema({
+const StoreSchema = new Schema({
     brand: {
         type: String,
-        require: true
+        required: true, 
+        unique: true,
+        maxLength: 30
+    },
+
+    alias: {
+        type: String,
+        required: true, 
+        unique: true
+    },
+
+    logo: {
+        type: String,
+        required: true
+    },
+
+    avatar: {
+        type: String,
+        required: true
     },
 
     coverImage: {
         type: String,
-        require: true
-    },
-
-    name: {
-        type: String,
-        require: true,
-        maxLength: 30
-    },
-
-    script: {
-        type: Array
+        required: true
     },
 
     description: {
         type: String
     },
 
-    isNew: {
+    descriptionImage: {
+        type: Array,
+        default: []
+    },
+
+    New: {
         type: Boolean,
         default: true
     },
@@ -38,7 +51,8 @@ const AccountSchema = new Schema({
 
     createdBy: {
         type: Schema.Types.ObjectId,
-        ref: 'Account'
+        ref: 'Account',
+        unique: Boolean
     },
 
     modifiedDate: {
@@ -57,4 +71,4 @@ const AccountSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model("Account", AccountSchema)
+module.exports = mongoose.model("Store", StoreSchema)

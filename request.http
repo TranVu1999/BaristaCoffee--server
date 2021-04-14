@@ -39,3 +39,19 @@ Content-Type: application/json
 {
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg"
 }
+
+
+###
+POST http://localhost:5000/api/store/register
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg
+
+{
+    "brand": "Barista Shop",
+    "alias": "barista-shop",
+    "coverImage": "https://image.shutterstock.com/image-photo/cup-aromatic-coffee-beans-on-260nw-1249115137.jpg",
+    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+    "descriptionImage": [],
+    "logo": "https://png.pngtree.com/png-clipart/20190516/original/pngtree-coffee-logo-vintage-vector-icon-cafe-shop-element-illustration-emblem-isolated-png-image_3747240.jpg",
+    "avatar": "https://www.mantruckandbus.com/fileadmin/media/bilder/02_19/219_05_busbusiness_interviewHeader_1485x1254.jpg"
+}

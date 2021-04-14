@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const KeyMapSchema = new Schema({
     key: {
         type: String,
-        require: true
+        required: true
     },
 
     score: {

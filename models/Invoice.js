@@ -4,19 +4,19 @@ const Schema = mongoose.Schema
 const InvoiceSchema = new Schema({
     chargeShip: {
         type: Number,
-        require: true
+        required: true
     },
 
     phoneNumber: {
         type: String,
         maxLength: 15,
-        require: true
+        required: true
     },
 
     fullname: {
         type: String,
         maxLength: 50,
-        require: true
+        required: true
     },
 
     addressId: {
@@ -31,13 +31,13 @@ const InvoiceSchema = new Schema({
 
     total: {
         type: Number,
-        require: true
+        required: true
     },
 
     email: {
         type: String,
         maxLength: 50,
-        require: true
+        required: true
     },
     
     orderSituation: {

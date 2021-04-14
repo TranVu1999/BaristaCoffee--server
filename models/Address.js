@@ -10,31 +10,31 @@ const AddressSchema = new Schema ({
     province: {
         type: String,
         maxLength: 50,
-        require: true
+        required: true
     },
 
     district: {
         type: String,
         maxLength: 50,
-        require: true
+        required: true
     },
 
     wards: {
         type: String,
         maxLength: 50,
-        require: true
+        required: true
     },
 
     houseNumber: {
         type: String,
         maxLength: 50,
-        require: true
+        required: true
     },
 
     phoneNumber: {
         type: String,
         maxLength: 15,
-        require: true
+        required: true
     },
 
     isDefault: {

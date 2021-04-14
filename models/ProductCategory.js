@@ -5,15 +5,15 @@ const ProductCategorySchema = new Schema({
     title: {
         type: String,
         maxLength: 50, 
-        require: true,
-        uniquire: true
+        required: true,
+        unique: true
     },
 
     alias: {
         type: String,
         maxLength: 60, 
-        require: true,
-        uniquire: true
+        required: true,
+        unique: true
     },
 
     createdDate: {

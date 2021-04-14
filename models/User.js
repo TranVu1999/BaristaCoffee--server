@@ -5,20 +5,20 @@ const UserChema = new Schema({
     fullname: {
         type: String,
         maxLength: 50,
-        require: true
+        required: true
     },
 
     phoneNumber: {
         type: String,
         maxLength: 15,
-        require: true,
+        required: true,
         default: ""
     },
 
     email: {
         type: String,
         maxLength: 50,
-        require: true,
+        required: true,
         default: ""
     },
 

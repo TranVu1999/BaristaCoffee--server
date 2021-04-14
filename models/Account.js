@@ -4,14 +4,14 @@ const Schema = mongoose.Schema
 const AccountSchema = new Schema({
     username: {
         type: String,
-        uniquire: true,
-        require: true,
+        unique: true,
+        required: true,
         maxLength: 50
     },
 
     password: {
         type: String,
-        uniquire: true
+        required: true
     },
 
     coin: {

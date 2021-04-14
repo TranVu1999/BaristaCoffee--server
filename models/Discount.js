@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const DiscountSchema = new Schema({
     code: {
         type: String,
-        require: true
+        required: true
     },
 
     cost: {

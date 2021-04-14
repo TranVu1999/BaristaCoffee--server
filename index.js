@@ -5,6 +5,7 @@ const cors = require('cors');
 
 
 const authRouter = require('./routes/auth');
+const storeRouter = require('./routes/store');
 
 const connectDB = async () =>{
     try {
@@ -35,6 +36,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 app.use('/api/auth', authRouter);
+app.use('/api/store', storeRouter);
 
 const POST = 5000;
 app.listen(POST, () => console.log("Server started on port 5000"))
