@@ -12,6 +12,16 @@ const shopController = require('../controllers/store')
 // @access Private
 router.post('/register', verifyToken, shopController.register)
 
+// @route PUT api/store/update
+// @desc Update for store
+// @access Private
+router.put('/update', verifyToken, shopController.update)
+
+// @route GET api/store/
+// @desc Get infomation of store
+// @access Private
+router.get('/', verifyToken, shopController.getInfomation)
+
 
 
 module.exports = router;

@@ -10,7 +10,7 @@ const verifyToken = (req, res, next) => {
     // Nếu như có authHeader thì lấy cái vế thứ 2 và nếu không có thì lấy vế 1
     
     const token = authHeader && authHeader.split(' ')[1];
-
+    console.log({token})
     if(!token){
         return res
         .status(401)
