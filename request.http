@@ -75,3 +75,52 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2M
 ###
 GET http://localhost:5000/api/store/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg
+
+
+# ===========================================================================
+# PRODUCT CATEGORY
+
+# Add new product category
+###
+POST  http://localhost:5000/api/product-category
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg
+Content-Type: application/json
+
+{
+    "title": "Paper Bag",
+    "alias": "paper-bag"
+}
+
+# Get all product category
+###
+GET  http://localhost:5000/api/product-category
+
+
+# ===========================================================================
+# PRODUCT
+
+# Add new product
+###
+POST  http://localhost:5000/api/product
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg
+Content-Type: application/json
+
+{
+    "avatar": "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-633x633.jpg",
+    "moreImage": [
+        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-gallery-1-1-500x500.jpg",
+        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-gallery-2-1-500x500.jpg",
+        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-gallery-3-2-500x500.jpg",
+        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-gallery-4-2-500x500.jpg",
+        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-gallery-1-1-500x500.jpg"
+    ],
+    "title": "Recycled Bags",
+    "alias": "recycled-bags",
+    "productCategoryId": "607845f8f2dd005c5cbe1fc2",
+    "price": "18000",
+    "shortDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.",
+    "detail": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    "sku": "01",
+    "keySearch": []
+
+}

@@ -1,7 +1,15 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const ProductCategorySchema = new Schema({
+const ProductSchema = new Schema({
+    avatar: {
+        type: String,
+        required: true
+    },
+    moreImage: {
+        type: Array,
+        reuired: true
+    },
     title: {
         type: String,
         maxLength: 50, 
@@ -31,7 +39,8 @@ const ProductCategorySchema = new Schema({
     },
 
     promo: {
-        type: Number
+        type: Number,
+        default: 0
     },
 
     shortDescription: {
@@ -55,7 +64,7 @@ const ProductCategorySchema = new Schema({
         default: 0
     },
 
-    keyString: {
+    keySearch: {
         type: Array
     },
 
@@ -85,4 +94,4 @@ const ProductCategorySchema = new Schema({
     }
 })
 
-module.exports = mongoose.model('ProductCategory', ProductCategorySchema)
+module.exports = mongoose.model('Product', ProductSchema)

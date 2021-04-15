@@ -6,6 +6,8 @@ const cors = require('cors');
 
 const authRouter = require('./routes/auth');
 const storeRouter = require('./routes/store');
+const prodCateRouter = require('./routes/productCategoy');
+const prodRouter = require('./routes/product');
 
 const connectDB = async () =>{
     try {
@@ -37,6 +39,8 @@ app.use(cors(corsOptions));
 
 app.use('/api/auth', authRouter);
 app.use('/api/store', storeRouter);
+app.use('/api/product-category', prodCateRouter);
+app.use('/api/product', prodRouter);
 
 const POST = 5000;
 app.listen(POST, () => console.log("Server started on port 5000"))
