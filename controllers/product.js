@@ -1,6 +1,7 @@
 const Account = require('./../models/Account')
 const Product = require('./../models/Product')
 const ProductSale = require('./../models/ProductSale')
+const KeyMap = require('./../models/KeyMap')
 
 module.exports = {
     /**
@@ -75,6 +76,15 @@ module.exports = {
                     productId: newProduct._id
                 })
                 newProductSale.save()
+            }
+
+            for(let item of keySearch){
+                let newKeyMap = new KeyMap({
+                    key: item,
+                    productId: newProduct._id,
+                    createdBy: accountId
+                })
+                newKeyMap.save()
             }
 
             res.json({

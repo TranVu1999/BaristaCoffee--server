@@ -13,7 +13,7 @@ const KeyMapSchema = new Schema({
     },
 
     accountId: {
-        type: schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Account"
     },
 
@@ -28,16 +28,6 @@ const KeyMapSchema = new Schema({
     },
 
     createdBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'Account'
-    },
-
-    modifiedDate: {
-        type: Date,
-        default: Date.now
-    },
-
-    modifiedBy: {
         type: Schema.Types.ObjectId,
         ref: 'Account'
     },

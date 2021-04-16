@@ -106,15 +106,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2M
 Content-Type: application/json
 
 {
-    "avatar": "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-633x633.jpg",
+    "avatar": "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-9-1-633x633.jpg",
     "moreImage": [
-        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-gallery-1-1-500x500.jpg",
-        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-gallery-2-1-500x500.jpg",
-        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-gallery-3-2-500x500.jpg",
-        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-gallery-4-2-500x500.jpg",
-        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-12-gallery-1-1-500x500.jpg"
+        
+        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-9-gallery-1-1-500x500.jpg",
+        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-9-gallery-2-1-500x500.jpg",
+        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-9-gallery-3-1-500x500.jpg",
+        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-9-gallery-4-2-500x500.jpg",
+        "https://barista.qodeinteractive.com/wp-content/uploads/2016/03/product-image-9-gallery-1-1-500x500.jpg"
     ],
-    "title": "Recycled Bags",
+    "title": "Moka Pot Barista",
     "alias": "recycled-bags",
     "productCategoryId": "607845f8f2dd005c5cbe1fc2",
     "price": "18,000",
@@ -131,6 +132,11 @@ Content-Type: application/json
             "from": "5",
             "to": "10",
             "price": 5
+        },
+        {
+            "from": "11",
+            "to": "15",
+            "price": 7
         }
     ]
 }
