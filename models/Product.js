@@ -52,6 +52,26 @@ const ProductSchema = new Schema({
         type: String,
         required: true
     },
+    
+    width: {
+        type: Number,
+        default: 1
+    },
+
+    height: {
+        type: Number,
+        default: 1
+    },
+
+    length: {
+        type: Number,
+        default: 1
+    },
+
+    weight: {
+        type: Number,
+        default: 1
+    },
 
     sku: {
         type: String,

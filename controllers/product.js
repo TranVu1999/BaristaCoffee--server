@@ -1,5 +1,6 @@
 const Account = require('./../models/Account')
 const Product = require('./../models/Product')
+const ProductSale = require('./../models/ProductSale')
 
 module.exports = {
     /**
@@ -17,7 +18,12 @@ module.exports = {
             shortDescription,
             detail,
             sku,
-            keySearch
+            keySearch,
+            height, 
+            weight,
+            length,
+            width,
+            listSale
         } = req.body
 
         try {
@@ -37,7 +43,7 @@ module.exports = {
                 .status(400)
                 .json({
                     success: false, 
-                    message: "This shop has been created"
+                    message: "This product has been created"
                 })
             }
 
@@ -53,10 +59,24 @@ module.exports = {
                 detail,
                 sku,
                 keySearch,
-                createdBy: accountId
+                createdBy: accountId,
+                height, 
+                weight,
+                length,
+                width
             })
-
             newProduct.save()
+
+            for(let item of listSale){
+                let newProductSale = new ProductSale({
+                    from: item.from,
+                    to: item.to,
+                    price: item.price,
+                    productId: newProduct._id
+                })
+                newProductSale.save()
+            }
+
             res.json({
                 success: true, 
                 message: "Your product created successfully", 
