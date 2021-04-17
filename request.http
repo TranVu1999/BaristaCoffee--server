@@ -1,3 +1,4 @@
+# AUHT
 POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
@@ -6,6 +7,7 @@ Content-Type: application/json
     "fullname": "Trần Vũ",
     "password": "Admin123@"
 }
+
 
 ###
 POST http://localhost:5000/api/auth/verify
@@ -23,6 +25,8 @@ Content-Type: application/json
     "username": "tranvudpqn123@gmail.com"
 }
 
+
+# Login
 ###
 POST http://localhost:5000/api/auth/login
 Content-Type: application/json
@@ -74,7 +78,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2M
 # GEt info of store
 ###
 GET http://localhost:5000/api/store/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2RmZmQwNTUyNjM0NjRkZGQ0OTIiLCJpYXQiOjE2MTg2NDU1NDZ9.SdL_8_Mbvm-nmY0gvZEhM7yp3xdshQpvqWA-AcwliCI
 
 
 # ===========================================================================
@@ -139,4 +143,16 @@ Content-Type: application/json
             "price": 7
         }
     ]
+}
+
+
+# Get product
+###
+POST  http://localhost:5000/api/product/filter
+Content-Type: application/json
+
+{
+    "page": 1,
+    "perPage": 10,
+    "sortBy": ""
 }

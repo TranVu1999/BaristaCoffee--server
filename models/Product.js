@@ -108,6 +108,11 @@ const ProductSchema = new Schema({
         ref: 'Account'
     },
 
+    new: {
+        type: Boolean,
+        default: true
+    },
+
     status: {
         type: Boolean,
         default: true

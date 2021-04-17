@@ -9,4 +9,9 @@ const productController = require('../controllers/product')
 // @access Private
 router.post('/', verifyToken, productController.addNew)
 
+// @route POST api/product/filter
+// @desc Get list product
+// @access Public
+router.post('/filter', productController.filter)
+
 module.exports = router;

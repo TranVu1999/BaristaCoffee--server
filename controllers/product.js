@@ -103,5 +103,75 @@ module.exports = {
             })
         }
         
+    },
+
+    /**
+     * Get list product
+     */
+    filter: async function(req, res){
+        const {
+            perPage,
+            page,
+            sortBy
+        } = req.body
+
+        try {
+            let listProduct = null
+
+            switch(sortBy){
+                case "Sort by lastest":
+                    listProduct = await Product.find().sort({createdDate: -1})
+                    break
+
+                case "Sort by popularity":
+                    listProduct = await Product.find().sort({view: -1})
+                    break
+
+                case "Sort by average rating":
+                    listProduct = await Product.find().sort({rating: -1})
+                    break
+
+                case "Sort by price: low to high":
+                    listProduct = await Product.find().sort({price: 1})
+                    break
+
+                case "Sort by price: high to low":
+                    listProduct = await Product.find().sort({price: -1})
+                    break
+                
+                default: 
+                    listProduct = await Product.find().sort({createdDate: -1})
+                    break
+            }
+
+            if(!listProduct){
+                return res
+                .status(400)
+                .json({
+                    success: false,
+                    message: "Cannot get list product"
+                })
+            }
+
+            const startIndex = (page - 1) * perPage
+            res.json({
+                success: true, 
+                message: "Your operation is done successfully",
+                sizeList: listProduct.length,
+                listProduct: listProduct.splice(startIndex, perPage),
+                
+            })
+            
+            
+        } catch (error) {
+            console.log(error)
+            res
+            .status(500)
+            .json({
+                success: false,
+                message: "Internal server error"
+            })
+        }
+        
     }
 }
