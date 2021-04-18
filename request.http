@@ -145,6 +145,11 @@ Content-Type: application/json
     ]
 }
 
+# Get list top3 rate product
+###
+GET  http://localhost:5000/api/product/top-rate
+
+
 
 # Get product
 ###

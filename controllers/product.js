@@ -173,5 +173,30 @@ module.exports = {
             })
         }
         
+    },
+
+    /**
+     * Get list top rated 3 product
+     */
+    filterTopRate: async function(req, res){
+        try {
+            const listProduct = await Product.find().sort({rating: 1})
+
+            res.json({
+                success: true, 
+                message: "Your operation is done successfully",
+                listProduct: listProduct.slice(0, 3)
+            })
+            
+            
+        } catch (error) {
+            console.log(error)
+            res
+            .status(500)
+            .json({
+                success: false,
+                message: "Internal server error"
+            })
+        }
     }
 }
