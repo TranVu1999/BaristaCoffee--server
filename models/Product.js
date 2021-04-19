@@ -84,6 +84,11 @@ const ProductSchema = new Schema({
         default: 0
     },
 
+    score: {
+        type: Number, 
+        default: 0
+    },
+
     keySearch: {
         type: Array
     },

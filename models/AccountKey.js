@@ -1,20 +1,11 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const KeyMapSchema = new Schema({
+const AccountKeySchema = new Schema({
+    
     key: {
         type: String,
         required: true
-    },
-
-    score: {
-        type: Number,
-        default: 0
-    },
-
-    productId: {
-        type: Schema.Types.ObjectId,
-        ref: "Product"
     },
 
     createdDate: {
@@ -31,6 +22,6 @@ const KeyMapSchema = new Schema({
         type: Boolean,
         default: true
     }
-})
+});
 
-module.exports = mongoose.model('KeyMap', KeyMapSchema)
+module.exports = mongoose.model("AccountKey", AccountKeySchema)

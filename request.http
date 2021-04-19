@@ -161,3 +161,15 @@ Content-Type: application/json
     "perPage": 10,
     "sortBy": ""
 }
+
+
+# ===========================================================================
+# KEY MAP
+###
+POST  http://localhost:5000/api/key-map/
+Content-Type: application/json
+
+{
+    "key": "coffee",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg"
+}

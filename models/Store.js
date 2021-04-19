@@ -68,6 +68,11 @@ const StoreSchema = new Schema({
     status: {
         type: Boolean,
         default: true
+    },
+    
+    score: {
+        type: Number, 
+        default: 0
     }
 });
 

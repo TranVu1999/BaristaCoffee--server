@@ -8,6 +8,7 @@ const authRouter = require('./routes/auth');
 const storeRouter = require('./routes/store');
 const prodCateRouter = require('./routes/productCategoy');
 const prodRouter = require('./routes/product');
+const keyMapRouter = require('./routes/keyMap');
 
 const connectDB = async () =>{
     try {
@@ -41,6 +42,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/store', storeRouter);
 app.use('/api/product-category', prodCateRouter);
 app.use('/api/product', prodRouter);
+app.use('/api/key-map', keyMapRouter);
 
 const POST = 5000;
 app.listen(POST, () => console.log("Server started on port 5000"))
