@@ -1,4 +1,5 @@
 const KeyMap = require('./../models/KeyMap')
+const AccountKey = require('./../models/AccountKey')
 const jwt = require('jsonwebtoken')
 
 /**
@@ -31,7 +32,7 @@ const getListKey = function(listKey, keySearch){
         }
 
         if(flag){
-            resListKey.push(itemKey)
+            resListKey.push({key: itemKey.key})
         }
     }
     return resListKey
@@ -45,19 +46,32 @@ module.exports = {
         const {key, accessToken} = req.body
 
         try {
+            const resLengthListKey = 10
+            let resListKey = []
+
             if(accessToken){
                 const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
                 const accountId = decoded.accountId
-                
+
+                const listKeyOfAccount = await AccountKey
+                .find({createdBy: accountId})
+                .sort({createdDate: -1})
+
+                resListKey = [...listKeyOfAccount.slice(0, 3)]
             }
 
+            let lengthKeyOfStore = resLengthListKey - resListKey.length
+            console.log({lengthKeyOfStore})
             const listKey = await KeyMap.find().sort({score: -1})
-            const resListKey = getListKey(listKey, key) 
+            resListKey = [
+                ...resListKey, 
+                ...getListKey(listKey, key).slice(0, lengthKeyOfStore)
+            ]
 
             res.json({
                 success: true, 
                 message: "Your product created successfully",
-                listKey: resListKey.slice(0, 10)
+                listKey: resListKey
             })
             
         } catch (error) {

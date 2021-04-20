@@ -1,7 +1,121 @@
 const Account = require('./../models/Account')
 const Product = require('./../models/Product')
+const ProductCategory = require('./../models/ProductCategory')
 const ProductSale = require('./../models/ProductSale')
 const KeyMap = require('./../models/KeyMap')
+
+const sortByDate = function (listProduct, typeSort){
+    let resListProduct = JSON.stringify(listProduct)
+    resListProduct = JSON.parse(resListProduct)
+
+    let keyProp = ""
+    switch(typeSort){
+        case "Sort by lastest":
+            keyProp = "createdDate"
+            break
+
+        case "Sort by popularity":
+            keyProp = "view"
+            break
+
+        case "Sort by average rating":
+            keyProp = "rating"
+            break
+
+        case "Sort by price: low to high":  
+            keyProp = "price"
+            break      
+        case "Sort by price: high to low":
+            keyProp = "price"
+            break
+
+        default:
+            break
+    }
+
+    let length = resListProduct.length
+    for(let i = 0; i < length; i++){
+        for(let j = i + 1; j < length; j++){
+            if(resListProduct[i][keyProp] < resListProduct[j][keyProp]){
+                let temp = {...resListProduct[i]}
+                resListProduct[i] = {...resListProduct[j]}
+                resListProduct[j] = {...temp}
+            }
+            
+        }
+    }
+
+    if(typeSort === "Sort by price: low to high"){
+        resListProduct = resListProduct.reverse()
+    }
+
+    return resListProduct
+}
+
+const filterKey = function(listKey, key){
+    let resListKey = []
+    for(let keyItem of listKey){
+        if(keyItem.key.toLowerCase().indexOf(key.toLowerCase()) !== -1){
+            resListKey.push(keyItem)
+        }
+    }
+
+    return resListKey
+}
+
+const filterProductByKey = function(listProduct, listKey){
+    listProduct = JSON.stringify(listProduct)
+    listProduct = JSON.parse(listProduct)
+
+    listKey = JSON.stringify(listKey)
+    listKey = JSON.parse(listKey)
+
+    let temp = []
+
+    for(let keyItem of listKey){
+        for(productItem of listProduct){
+            if(productItem._id == keyItem.productId){
+                temp.push(productItem)
+            }
+        }
+    }
+
+    console.log({temp})
+
+    let resListProduct = []
+    for(let tempItem of temp){
+        let flag = true
+        let lengthProduct = resListProduct.length
+        for(let i = 0; i < lengthProduct; i++){
+            if(tempItem._id == resListProduct[i]._id){
+                flag = false
+                break
+            }
+        }
+
+        if(flag){
+            resListProduct.push(tempItem)
+        }
+    }
+
+    return resListProduct
+}
+
+const filterProductByProductCategory = function (listProduct, productCategoryId){
+    let resListProduct = []
+    listProduct = JSON.stringify(listProduct)
+    listProduct = JSON.parse(listProduct)
+
+    let lengthProduct = listProduct.length
+
+    for(let i = 0; i < lengthProduct; i++){
+        if(productCategoryId == listProduct[i].productCategoryId){
+            resListProduct.push(listProduct[i])
+        }
+    }
+
+    return resListProduct
+}
 
 module.exports = {
     /**
@@ -112,37 +226,29 @@ module.exports = {
         const {
             perPage,
             page,
-            sortBy
+            sortBy,
+            productCategory,
+            keySearch
         } = req.body
 
         try {
-            let listProduct = null
+            let listProduct = await Product.find()
 
-            switch(sortBy){
-                case "Sort by lastest":
-                    listProduct = await Product.find().sort({createdDate: -1})
-                    break
+            if(keySearch){
+                // B1: lấy danh sách các từ khóa ra.
+                const db_listKey = await KeyMap.find()
+                const listKey = filterKey(db_listKey, keySearch)
 
-                case "Sort by popularity":
-                    listProduct = await Product.find().sort({view: -1})
-                    break
-
-                case "Sort by average rating":
-                    listProduct = await Product.find().sort({rating: -1})
-                    break
-
-                case "Sort by price: low to high":
-                    listProduct = await Product.find().sort({price: 1})
-                    break
-
-                case "Sort by price: high to low":
-                    listProduct = await Product.find().sort({price: -1})
-                    break
-                
-                default: 
-                    listProduct = await Product.find().sort({createdDate: -1})
-                    break
+                listProduct = filterProductByKey(listProduct, listKey)
             }
+
+            if(productCategory !== "All"){
+                const prodCate= await ProductCategory.findOne({title: productCategory})
+                
+                listProduct = filterProductByProductCategory(listProduct, prodCate._id)
+            }
+
+            listProduct = sortByDate(listProduct, sortBy)
 
             if(!listProduct){
                 return res
