@@ -1,10 +1,46 @@
 const Account = require('./../models/Account')
+const Store = require('./../models/Store')
 const Product = require('./../models/Product')
 const ProductCategory = require('./../models/ProductCategory')
 const ProductSale = require('./../models/ProductSale')
 const KeyMap = require('./../models/KeyMap')
 
-const sortByDate = function (listProduct, typeSort){
+const sortByScore = function (listProduct, listStore){
+    let resListProduct = JSON.stringify(listProduct)
+    resListProduct = JSON.parse(resListProduct)
+
+    listStore = JSON.stringify(listStore)
+    listStore = JSON.parse(listStore)
+
+    console.log(listStore.length)
+
+    // update score
+    let lengthProduct = resListProduct.length
+    for(let storeItem of listStore){
+        for(let i = 0; i < lengthProduct; i++){
+            if(storeItem.createdBy === resListProduct[i].createdBy){
+                console.log("ok")
+                resListProduct[i].view += storeItem.score * 2
+            }
+        }
+    }
+
+    
+    for(let i = 0; i < lengthProduct; i++){
+        for(let j = i + 1; j < lengthProduct; j++){
+            if(resListProduct[i].view < resListProduct[j].view){
+                let temp = {...resListProduct[i]}
+                resListProduct[i] = {...resListProduct[j]}
+                resListProduct[j] = {...temp}
+            }
+            
+        }
+    }
+
+    return resListProduct
+}
+
+const sortByType = function (listProduct, typeSort){
     let resListProduct = JSON.stringify(listProduct)
     resListProduct = JSON.parse(resListProduct)
 
@@ -79,8 +115,6 @@ const filterProductByKey = function(listProduct, listKey){
             }
         }
     }
-
-    console.log({temp})
 
     let resListProduct = []
     for(let tempItem of temp){
@@ -234,6 +268,7 @@ module.exports = {
         try {
             let listProduct = await Product.find()
 
+
             if(keySearch){
                 // B1: lấy danh sách các từ khóa ra.
                 const db_listKey = await KeyMap.find()
@@ -248,7 +283,13 @@ module.exports = {
                 listProduct = filterProductByProductCategory(listProduct, prodCate._id)
             }
 
-            listProduct = sortByDate(listProduct, sortBy)
+            if(sortBy === "Sort by popularity"){
+                const listStore = await Store.find()
+                listProduct = sortByScore(listProduct, listStore)
+            }else{
+                listProduct = sortByType(listProduct, sortBy)
+            }
+            
 
             if(!listProduct){
                 return res

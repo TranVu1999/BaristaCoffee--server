@@ -157,11 +157,11 @@ POST  http://localhost:5000/api/product/filter
 Content-Type: application/json
 
 {
-    "page": 1,
+    "page": 2,
     "perPage": 10,
     "sortBy": "Sort by popularity",
     "productCategory": "All",
-    "keySearch": "coffee"
+    "keySearch": ""
 }
 
 
