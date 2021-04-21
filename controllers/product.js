@@ -1,6 +1,7 @@
 const Account = require('./../models/Account')
 const Store = require('./../models/Store')
 const Product = require('./../models/Product')
+const ProductRate = require('./../models/ProductRate')
 const ProductCategory = require('./../models/ProductCategory')
 const ProductSale = require('./../models/ProductSale')
 const KeyMap = require('./../models/KeyMap')
@@ -149,6 +150,12 @@ const filterProductByProductCategory = function (listProduct, productCategoryId)
     }
 
     return resListProduct
+}
+
+const convert = function(list){
+    list = JSON.stringify(list)
+    list = JSON.parse(list)
+    return list
 }
 
 module.exports = {
@@ -345,5 +352,54 @@ module.exports = {
                 message: "Internal server error"
             })
         }
+    },
+
+    /**
+     * Get product infomation 
+     */
+    getProductInfomation: async function(req, res){
+        const {alias} = req.params
+
+        try {
+            let product = await Product.findOne({alias})
+            product = convert(product)
+
+            let productCategory = await ProductCategory.findOne({_id: product.productCategoryId})
+            productCategory = convert(productCategory)
+
+            let comment = await ProductRate.find({productId: product._id})
+            comment = convert(comment)
+
+            if(!product){
+                res
+                .status(400)
+                .json({
+                    success: false, 
+                    message: "This product is not found"
+                })
+            }
+
+            res.json({
+                success: true, 
+                message: "Your operation is done successfully",
+                product: {
+                    ...product, 
+                    productCategory: productCategory.title,
+                    comment
+                }
+            })
+            
+            
+        } catch (error) {
+            console.log(error)
+            res
+            .status(500)
+            .json({
+                success: false,
+                message: "Internal server error"
+            })
+        }
     }
+
+
 }

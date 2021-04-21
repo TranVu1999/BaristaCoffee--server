@@ -165,6 +165,13 @@ Content-Type: application/json
 }
 
 
+# Get product detail
+###
+GET http://localhost:5000/api/product/plastic-pouch
+
+
+
+
 # ===========================================================================
 # KEY MAP
 ###
