@@ -17,7 +17,7 @@ router.post('/filter', productController.filter)
 // @route GET api/product/:alias
 // @desc Get product detail
 // @access Public
-router.get('/:alias', productController.getProductInfomation)
+router.get('/detail/:alias', productController.getProductInfomation)
 
 // @route GET api/product/top-rate
 // @desc Get list top 3 rated product

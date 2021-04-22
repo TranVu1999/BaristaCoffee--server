@@ -7,18 +7,12 @@ const ProductSale = require('./../models/ProductSale')
 const KeyMap = require('./../models/KeyMap')
 
 const sortByScore = function (listProduct, listStore){
-    let resListProduct = JSON.stringify(listProduct)
-    resListProduct = JSON.parse(resListProduct)
-
-    listStore = JSON.stringify(listStore)
-    listStore = JSON.parse(listStore)
-
     // update score
-    let lengthProduct = resListProduct.length
+    let lengthProduct = listProduct.length
     for(let storeItem of listStore){
         for(let i = 0; i < lengthProduct; i++){
-            if(storeItem.createdBy === resListProduct[i].createdBy){
-                resListProduct[i].view += storeItem.score * 2
+            if(storeItem.createdBy === listProduct[i].createdBy){
+                listProduct[i].score += storeItem.score * 2
             }
         }
     }
@@ -26,21 +20,20 @@ const sortByScore = function (listProduct, listStore){
     
     for(let i = 0; i < lengthProduct; i++){
         for(let j = i + 1; j < lengthProduct; j++){
-            if(resListProduct[i].view < resListProduct[j].view){
-                let temp = {...resListProduct[i]}
-                resListProduct[i] = {...resListProduct[j]}
-                resListProduct[j] = {...temp}
+            if(listProduct[i].score < listProduct[j].score){
+                let temp = {...listProduct[i]}
+                listProduct[i] = {...listProduct[j]}
+                listProduct[j] = {...temp}
             }
             
         }
     }
 
-    return resListProduct
+    return listProduct
 }
 
 const sortByType = function (listProduct, typeSort){
-    let resListProduct = JSON.stringify(listProduct)
-    resListProduct = JSON.parse(resListProduct)
+    let resListProduct = [...listProduct]
 
     let keyProp = ""
     switch(typeSort){
@@ -98,17 +91,10 @@ const filterKey = function(listKey, key){
 }
 
 const filterProductByKey = function(listProduct, listKey){
-    listProduct = JSON.stringify(listProduct)
-    listProduct = JSON.parse(listProduct)
-
-    listKey = JSON.stringify(listKey)
-    listKey = JSON.parse(listKey)
-
     let temp = []
-
     for(let keyItem of listKey){
         for(productItem of listProduct){
-            if(productItem._id == keyItem.productId){
+            if(productItem._id.toString() == keyItem.productId.toString()){
                 temp.push(productItem)
             }
         }
@@ -135,24 +121,15 @@ const filterProductByKey = function(listProduct, listKey){
 
 const filterProductByProductCategory = function (listProduct, productCategoryId){
     let resListProduct = []
-    listProduct = JSON.stringify(listProduct)
-    listProduct = JSON.parse(listProduct)
-
     let lengthProduct = listProduct.length
-
     for(let i = 0; i < lengthProduct; i++){
-        if(productCategoryId == listProduct[i].productCategoryId){
+
+        if(productCategoryId.toString() == listProduct[i].productCategoryId.toString()){
             resListProduct.push(listProduct[i])
         }
     }
 
     return resListProduct
-}
-
-const convert = function(list){
-    list = JSON.stringify(list)
-    list = JSON.parse(list)
-    return list
 }
 
 module.exports = {
@@ -270,8 +247,7 @@ module.exports = {
         } = req.body
 
         try {
-            let listProduct = await Product.find()
-
+            let listProduct = await Product.find().lean()
 
             if(keySearch){
                 // B1: lấy danh sách các từ khóa ra.
@@ -282,16 +258,17 @@ module.exports = {
             }
 
             if(productCategory !== "All"){
-                const prodCate= await ProductCategory.findOne({title: productCategory})
-                
+                const prodCate= await ProductCategory.findOne({title: productCategory}).lean()
                 listProduct = filterProductByProductCategory(listProduct, prodCate._id)
+                
             }
-
+            
             if(sortBy === "Sort by popularity"){
-                const listStore = await Store.find()
+                const listStore = await Store.find().lean()
                 listProduct = sortByScore(listProduct, listStore)
             }else{
                 listProduct = sortByType(listProduct, sortBy)
+
             }
             
 
@@ -331,7 +308,7 @@ module.exports = {
      */
     filterTopRate: async function(req, res){
         try {
-            const listProduct = await Product.find().sort({rating: 1})
+            const listProduct = await Product.find().sort({rating: 1}).lean()
 
             res.json({
                 success: true, 
@@ -358,14 +335,14 @@ module.exports = {
         const {alias} = req.params
 
         try {
-            let product = await Product.findOne({alias})
-            product = convert(product)
+            const listProduct = await Product.find().lean()
+            const listStore = await Store.find().lean()
 
-            let productCategory = await ProductCategory.findOne({_id: product.productCategoryId})
-            productCategory = convert(productCategory)
+            let product = listProduct.filter(item => item.alias === alias)[0]
 
-            let comment = await ProductRate.find({productId: product._id})
-            comment = convert(comment)
+            let productCategory = await ProductCategory.findOne({_id: product.productCategoryId}).lean()
+
+            let comment = await ProductRate.find({productId: product._id}).lean()
 
             if(!product){
                 res
@@ -376,13 +353,34 @@ module.exports = {
                 })
             }
 
+            // get list product relative
+            // get list key of product
+            const listKey = product.keySearch
+            let listRelativeProduct = listProduct.filter(item =>{
+                if(item._id !== product._id){
+                    for(let keyRelativeItem of item.keySearch){
+                        for(let keyItem of listKey){
+                            if(
+                                keyItem.toLowerCase().indexOf(keyRelativeItem.toLowerCase()) !== -1
+                            ){
+                                return true
+                            }
+                        }
+                    }
+                }
+                return false
+            })
+
+            listRelativeProduct = sortByScore(listProduct, listStore)
+
             res.json({
                 success: true, 
                 message: "Your operation is done successfully",
                 product: {
                     ...product, 
                     productCategory: productCategory.title,
-                    comment
+                    comment,
+                    listRelativeProduct: listRelativeProduct.slice(0, 4)
                 }
             })
             
@@ -396,7 +394,7 @@ module.exports = {
                 message: "Internal server error"
             })
         }
-    }
+    },
 
 
 }

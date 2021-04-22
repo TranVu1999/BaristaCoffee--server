@@ -160,14 +160,14 @@ Content-Type: application/json
     "page": 2,
     "perPage": 10,
     "sortBy": "Sort by popularity",
-    "productCategory": "All",
+    "productCategory": "Coffee Pot",
     "keySearch": ""
 }
 
 
 # Get product detail
 ###
-GET http://localhost:5000/api/product/plastic-pouch
+GET http://localhost:5000/api/product/detail/ground-coffee
 
 
 
