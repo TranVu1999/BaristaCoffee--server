@@ -13,14 +13,11 @@ const sortByScore = function (listProduct, listStore){
     listStore = JSON.stringify(listStore)
     listStore = JSON.parse(listStore)
 
-    console.log(listStore.length)
-
     // update score
     let lengthProduct = resListProduct.length
     for(let storeItem of listStore){
         for(let i = 0; i < lengthProduct; i++){
             if(storeItem.createdBy === resListProduct[i].createdBy){
-                console.log("ok")
                 resListProduct[i].view += storeItem.score * 2
             }
         }
