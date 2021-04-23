@@ -157,11 +157,11 @@ POST  http://localhost:5000/api/product/filter
 Content-Type: application/json
 
 {
-    "page": 2,
+    "page": 1,
     "perPage": 10,
     "sortBy": "Sort by popularity",
-    "productCategory": "Coffee Pot",
-    "keySearch": ""
+    "productCategory": "All",
+    "keySearch": "Co"
 }
 
 
@@ -174,6 +174,8 @@ GET http://localhost:5000/api/product/detail/ground-coffee
 
 # ===========================================================================
 # KEY MAP
+
+# Get list key map
 ###
 POST  http://localhost:5000/api/key-map/
 Content-Type: application/json
@@ -181,4 +183,16 @@ Content-Type: application/json
 {
     "key": "coffee",
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg"
+}
+
+
+# Add key map
+###
+POST  http://localhost:5000/api/key-map/add
+Content-Type: application/json
+
+{
+    "key": ["Coffee", "Con Ca"],
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg",
+    "productId": "6079c0a9f33d0f08b42015f4"
 }

@@ -9,7 +9,7 @@ const KeyMapSchema = new Schema({
 
     score: {
         type: Number,
-        default: 0
+        default: 1
     },
 
     productId: {

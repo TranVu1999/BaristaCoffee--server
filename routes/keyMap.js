@@ -8,5 +8,10 @@ const keyMapController = require('./../controllers/keyMap')
 // @access Public
 router.post('/', keyMapController.getKey)
 
+// @route POST api/key-map/add
+// @desc add new key
+// @access Public
+router.post('/add', keyMapController.addKey)
+
 
 module.exports = router;
