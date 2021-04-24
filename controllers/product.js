@@ -91,10 +91,13 @@ const filterKey = function(listKey, key){
 }
 
 const filterProductByKey = function(listProduct, listKey){
+    console.log(listKey)
+
     let temp = []
     for(let keyItem of listKey){
         for(productItem of listProduct){
-            if(productItem._id.toString() == keyItem.productId.toString()){
+            
+            if(productItem._id.toString() === keyItem.productId.toString()){
                 temp.push(productItem)
             }
         }
@@ -251,11 +254,13 @@ module.exports = {
 
             if(keySearch){
                 // B1: lấy danh sách các từ khóa ra.
-                const db_listKey = await KeyMap.find()
+                const db_listKey = await KeyMap.find().lean()
                 const listKey = filterKey(db_listKey, keySearch)
 
                 listProduct = filterProductByKey(listProduct, listKey)
             }
+
+            
 
             if(productCategory !== "All"){
                 const prodCate= await ProductCategory.findOne({title: productCategory}).lean()

@@ -132,7 +132,6 @@ module.exports = {
             if(accessToken){
                 const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
                 const accountId = decoded.accountId;
-
                 const account = await Account.findOne({_id: accountId}).lean()
 
                 // account is found
@@ -143,7 +142,7 @@ module.exports = {
 
                     for(let itemKeyClient of key){
                         let isNew = true
-                        for(let itemKeyClient of listKeyAccount){
+                        for(let itemKeyServer of listKeyAccount){
                             if(itemKeyClient.toLowerCase() === itemKeyServer.key.toLowerCase()){
         
                                 const keyUpdate = new AccountKey({
@@ -169,9 +168,10 @@ module.exports = {
                         }
                     }
                 }
-
-                
             }
+
+            
+
             
 
             const listKey = await KeyMap.find({productId}).lean()
@@ -207,10 +207,6 @@ module.exports = {
                     await newkey.save()
                 }
             }
-
-
-
-
 
 
             res.json({
