@@ -91,8 +91,6 @@ const filterKey = function(listKey, key){
 }
 
 const filterProductByKey = function(listProduct, listKey){
-    console.log(listKey)
-
     let temp = []
     for(let keyItem of listKey){
         for(productItem of listProduct){
@@ -251,6 +249,8 @@ module.exports = {
 
         try {
             let listProduct = await Product.find().lean()
+            let listProductSale = await ProductSale.find().lean()
+            const lengthListSale = listProductSale.length
 
             if(keySearch){
                 // B1: lấy danh sách các từ khóa ra.
@@ -275,7 +275,6 @@ module.exports = {
                 listProduct = sortByType(listProduct, sortBy)
 
             }
-            
 
             if(!listProduct){
                 return res
@@ -285,13 +284,29 @@ module.exports = {
                     message: "Cannot get list product"
                 })
             }
-
+            
             const startIndex = (page - 1) * perPage
+            tempListProduct = listProduct.slice(startIndex, perPage)
+            const lengthProduct = tempListProduct.length
+
+            for(let i = 0; i < lengthProduct; i++){
+                let listSale = []
+                for(let j = 0; j < lengthListSale; j++){
+                    if(listProductSale[j].productId.toString() === tempListProduct[i]._id.toString()){
+                        listSale.push(listProductSale[j])
+                    }
+                }
+
+                tempListProduct[i] = {...tempListProduct[i], listSale}
+            }
+
+            console.log(listProduct.length)
+            
             res.json({
                 success: true, 
                 message: "Your operation is done successfully",
                 sizeList: listProduct.length,
-                listProduct: listProduct.splice(startIndex, perPage),
+                listProduct: tempListProduct,
                 
             })
             
@@ -345,10 +360,6 @@ module.exports = {
 
             let product = listProduct.filter(item => item.alias === alias)[0]
 
-            let productCategory = await ProductCategory.findOne({_id: product.productCategoryId}).lean()
-
-            let comment = await ProductRate.find({productId: product._id}).lean()
-
             if(!product){
                 res
                 .status(400)
@@ -358,6 +369,11 @@ module.exports = {
                 })
             }
 
+            let productCategory = await ProductCategory.findOne({_id: product.productCategoryId}).lean()
+
+            let comment = await ProductRate.find({productId: product._id}).lean()
+
+            
             // get list product relative
             // get list key of product
             const listKey = product.keySearch
@@ -375,8 +391,10 @@ module.exports = {
                 }
                 return false
             })
-
             listRelativeProduct = sortByScore(listProduct, listStore)
+
+            // get store info
+            const store = listStore.find(item => item.createdBy.toString() === product.createdBy.toString())
 
             res.json({
                 success: true, 
@@ -386,7 +404,9 @@ module.exports = {
                     productCategory: productCategory.title,
                     comment,
                     listRelativeProduct: listRelativeProduct.slice(0, 4)
-                }
+                },
+                store
+
             })
             
             

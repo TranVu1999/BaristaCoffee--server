@@ -161,7 +161,7 @@ Content-Type: application/json
     "perPage": 10,
     "sortBy": "Sort by popularity",
     "productCategory": "All",
-    "keySearch": "Con heo dat"
+    "keySearch": ""
 }
 
 

@@ -27,7 +27,10 @@ module.exports = {
             const account = await Account.findOne({username})
             if(!account){
                 return res
-                .json({success: false, message: "Incorrect username or password"})
+                .json({
+                    success: false, 
+                    message: "Incorrect username or password"
+                })
             }
 
             // Username found
@@ -54,6 +57,7 @@ module.exports = {
             })
 
             const accountInfo = {
+                id: account._id,
                 username: account.username,
                 fullname: user.fullname,
                 phoneNumber: user.phoneNumber,
