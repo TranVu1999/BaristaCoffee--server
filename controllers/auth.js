@@ -13,6 +13,107 @@ const ProductSaveForLate = require('./../models/ProductSaveForLate')
 module.exports = {
 
     /**
+     * Check password
+     */
+    checkPassword: async function(req, res){
+        const {password} = req.body
+
+        try {
+
+            const account = await Account.findOne({_id: req.accountId}).lean()
+
+            if(account){
+                const passwordValid = await argon2.verify(account.password, password);
+                if(!passwordValid){
+                    return res
+                    .json({
+                        success: false,
+                        message: "This password is not correct"
+                    })
+                }
+
+                return res
+                    .json({
+                        success: true,
+                        message: "ok"
+                    })
+            }
+
+            return res
+            .json({
+                success: false,
+                message: "This account is not found"
+            })
+        } catch (error) {
+            console.log(error)
+            res
+            .status(500)
+            .json({
+                success: false,
+                message: "Internal server error"
+            })
+        }
+    },
+
+    /**
+     * Update account infomation
+     */
+    update: async function(req, res){
+
+        const {
+            fullname, 
+            phoneNumber, 
+            email, 
+            gender, 
+            birthday, 
+            newPassword
+        } = req.body
+
+        try {
+            const userUpdate = {
+                fullname,
+                phoneNumber,
+                email,
+                gender, 
+                birthday: new Date(birthday.year, birthday.month, birthday.date),
+            }
+
+            let accountUpdate = {
+                modifiedDate: Date.now()
+            } 
+            
+            if(newPassword){
+                
+                const hashedPassword = await argon2.hash(newPassword);
+                accountUpdate = {
+                    ...accountUpdate,
+                    password: hashedPassword
+                }                 
+            }
+
+            let newAccount = await Account.findOneAndUpdate({_id: req.accountId}, accountUpdate)
+
+            const newUser = await User.findOneAndUpdate({accountId: req.accountId}, userUpdate).lean()
+
+            return res
+            .json({
+                success: true, 
+                message: "ok",
+                newUser, 
+                newAccount
+            }) 
+        } catch (error) {
+            console.log(error)
+            res
+            .status(500)
+            .json({
+                success: false,
+                message: "Internal server error"
+            })
+        }
+    },
+
+    /**
      * Sign in for user
      */
     login: async function(req, res){

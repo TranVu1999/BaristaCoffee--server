@@ -1,9 +1,19 @@
 const express = require('express')
 const router = express.Router()
-const argon2 = require('argon2')
-const jwt = require('jsonwebtoken')
+const verifyToken = require('../middleware/auth');
 
 const authController = require('./../controllers/auth')
+
+
+// @route POST api/update
+// @desc Update account infomation
+// @access Private
+router.post('/update', verifyToken, authController.update)
+
+// @route POST api/check-password
+// @desc Update account infomation
+// @access Private
+router.post('/check-password', verifyToken, authController.checkPassword)
 
 // @route POST api/auth/register
 // @desc Register user

@@ -10,6 +10,33 @@ Content-Type: application/json
 
 
 ###
+// Update account infomation
+POST http://localhost:5000/api/auth/update
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2RmZmQwNTUyNjM0NjRkZGQ0OTIiLCJpYXQiOjE2MTk5MjI5MzZ9.yPHFkqlqnkp7CnZ8cbbXX2ecmiqbxWLuLcD0oYJni8w
+
+{
+    "fullname": "Trần Vũ Lê Anh",
+    "phoneNumber": "0123456789",
+    "email": "Admin123@gmail.com",
+    "gender": "female",
+    "birthday": {"date": 10, "month": 1, "year": 1999},
+    "newPassword": ""
+}
+
+
+###
+// check password
+POST http://localhost:5000/api/auth/check-password
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2RmZmQwNTUyNjM0NjRkZGQ0OTIiLCJpYXQiOjE2MTk5MjI5MzZ9.yPHFkqlqnkp7CnZ8cbbXX2ecmiqbxWLuLcD0oYJni8w
+
+{
+    "password": "Admin123@"
+}
+
+
+###
 POST http://localhost:5000/api/auth/verify
 Content-Type: application/json
 
