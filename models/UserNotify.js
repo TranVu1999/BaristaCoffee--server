@@ -7,7 +7,7 @@ const UserNotifySchema = new Schema({
         enum: ["invoice", "system", "promotion"]
     },
 
-    isNew: {
+    new: {
         type: Boolean,
         default: true
     },

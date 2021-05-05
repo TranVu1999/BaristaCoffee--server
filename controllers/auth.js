@@ -9,6 +9,7 @@ const ProductCommented = require('./../models/ProductCommented')
 const ProductFavorited = require('./../models/ProductFavorited')
 const ProductReaded = require('./../models/ProductReaded')
 const ProductSaveForLate = require('./../models/ProductSaveForLate')
+const UserNotify = require('./../models/UserNotify')
 
 module.exports = {
 
@@ -81,6 +82,8 @@ module.exports = {
             let accountUpdate = {
                 modifiedDate: Date.now()
             } 
+
+            let newNotify = null
             
             if(newPassword){
                 
@@ -88,7 +91,15 @@ module.exports = {
                 accountUpdate = {
                     ...accountUpdate,
                     password: hashedPassword
-                }                 
+                }    
+                
+                newNotify = new UserNotify({
+                    typeNotify: "system",
+                    toAccount: req.accountId,
+                    content: "CoffeeShop gửi lời cám ơn chân thành vì quý khách đã tin tưởng sử dụng dịch vụ của chúng tôi. Hãy thay đổi mật khẩu thường xuyên để có được sự bảo mật tốt hơn."
+                })
+                
+                await newNotify.save()
             }
 
             let newAccount = await Account.findOneAndUpdate({_id: req.accountId}, accountUpdate)
@@ -100,7 +111,8 @@ module.exports = {
                 success: true, 
                 message: "ok",
                 newUser, 
-                newAccount
+                newAccount,
+                notify: newNotify
             }) 
         } catch (error) {
             console.log(error)
@@ -157,6 +169,8 @@ module.exports = {
                 accountId: account._id
             })
 
+            const notifies = await UserNotify.find({toAccount: account._id})
+
             const accountInfo = {
                 id: account._id,
                 username: account.username,
@@ -168,7 +182,8 @@ module.exports = {
                 productSaveForLates,
                 productReads,
                 productFavorites,
-                productComments
+                productComments,
+                notifies
             }
 
             const accessToken = jwt.sign({accountId: account._id}, process.env.ACCESS_TOKEN_SECRET)
@@ -217,6 +232,7 @@ module.exports = {
                 const productFavorites = await ProductFavorited.find({accountId})
                 const productReads = await ProductReaded.find({accountId})
                 const productSaveForLates = await ProductSaveForLate.find({accountId})
+                const notifies = await UserNotify.find({toAccount: accountId, status: true})
 
                 const accountInfo =  {
                     username: account.username,
@@ -228,7 +244,8 @@ module.exports = {
                     productSaveForLates,
                     productReads,
                     productFavorites,
-                    productComments
+                    productComments,
+                    notifies
                 }
 
                 return res.json({

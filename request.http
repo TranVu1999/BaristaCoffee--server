@@ -21,7 +21,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2M
     "email": "Admin123@gmail.com",
     "gender": "female",
     "birthday": {"date": 10, "month": 1, "year": 1999},
-    "newPassword": ""
+    "newPassword": "Admin123@"
 }
 
 
@@ -196,7 +196,18 @@ Content-Type: application/json
 ###
 GET http://localhost:5000/api/product/detail/ground-coffee
 
+# Comment product
+###
+POST  http://localhost:5000/api/product/comment
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg
+Content-Type: application/json
 
+{
+    "rating": 0,
+    "comment": "Mình có thể sử dụng thêm topping không?",
+    "productId": "60791775f21fc857b4123d45",
+    "author": "Tran Le Anh Vu"
+}
 
 
 # ===========================================================================

@@ -4,8 +4,13 @@ const verifyToken = require('../middleware/auth');
 
 const productController = require('../controllers/product')
 
+// @route POST api/product/comment
+// @desc Add new comment product
+// @access Private
+router.post('/comment', verifyToken, productController.addComment)
+
 // @route POST api/product
-// @desc Add new product category
+// @desc Add new product 
 // @access Private
 router.post('/', verifyToken, productController.addNew)
 

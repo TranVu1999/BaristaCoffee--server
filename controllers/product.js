@@ -135,6 +135,52 @@ const filterProductByProductCategory = function (listProduct, productCategoryId)
 
 module.exports = {
     /**
+     * Add new comment product
+     */
+    addComment: async function(req, res){
+        const {rating, comment, productId, author} = req.body
+        try {
+            const account = await Account.findOne({_id: req.accountId})
+            if(account){
+
+                const product = await Product.findOne({_id: productId})
+                if(product){
+                    return res
+                    .json({
+                        success: true,
+                        message: "ok", 
+                        product
+                    })
+                }
+
+                return res
+                .status(400)
+                .json({
+                    success: false,
+                    message: "This product is not found"
+                })
+                
+            }
+
+            return res
+            .status(400)
+            .json({
+                success: false,
+                message: "This account is not found"
+            })
+            
+        } catch (error) {
+            console.log(error)
+            res
+            .status(500)
+            .json({
+                success: false,
+                message: "Internal server error"
+            })
+        }
+    },
+
+    /**
      * Add new product
      */
     addNew: async function(req, res){
