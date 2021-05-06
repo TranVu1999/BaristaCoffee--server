@@ -138,18 +138,36 @@ module.exports = {
      * Add new comment product
      */
     addComment: async function(req, res){
-        const {rating, comment, productId, author} = req.body
+        const {
+            rating, 
+            comment, 
+            productId, 
+            author,
+            toUser
+        } = req.body
+
         try {
             const account = await Account.findOne({_id: req.accountId})
             if(account){
-
                 const product = await Product.findOne({_id: productId})
+
+                const newRate = new ProductRate({
+                    rating,
+                    comment,
+                    productId,
+                    author,
+                    toUser,
+                    createdBy: req.accountId
+                })
+
+                await newRate.save()
+
                 if(product){
                     return res
                     .json({
                         success: true,
                         message: "ok", 
-                        product
+                        newRate
                     })
                 }
 
@@ -441,7 +459,8 @@ module.exports = {
 
             // get store info
             const store = listStore.find(item => item.createdBy.toString() === product.createdBy.toString())
-
+            
+            
             res.json({
                 success: true, 
                 message: "Your operation is done successfully",

@@ -194,7 +194,7 @@ Content-Type: application/json
 
 # Get product detail
 ###
-GET http://localhost:5000/api/product/detail/ground-coffee
+GET http://localhost:5000/api/product/detail/tea-cup%20barista
 
 # Comment product
 ###
@@ -205,7 +205,7 @@ Content-Type: application/json
 {
     "rating": 0,
     "comment": "Mình có thể sử dụng thêm topping không?",
-    "productId": "60791775f21fc857b4123d45",
+    "productId": "6079bf84f33d0f08b42015ee",
     "author": "Tran Le Anh Vu"
 }
 
