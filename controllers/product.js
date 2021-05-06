@@ -417,6 +417,7 @@ module.exports = {
      */
     getProductInfomation: async function(req, res){
         const {alias} = req.params
+        
 
         try {
             const listProduct = await Product.find().lean()
@@ -460,7 +461,7 @@ module.exports = {
             // get store info
             const store = listStore.find(item => item.createdBy.toString() === product.createdBy.toString())
             
-            
+
             res.json({
                 success: true, 
                 message: "Your operation is done successfully",
