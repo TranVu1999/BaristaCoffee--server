@@ -4,6 +4,7 @@ const argon2 = require('argon2')
 const jwt = require('jsonwebtoken')
 
 const Account = require('./../models/Account')
+const Address = require('./../models/Address')
 const User = require('./../models/User')
 const ProductCommented = require('./../models/ProductCommented')
 const ProductFavorited = require('./../models/ProductFavorited')
@@ -170,6 +171,8 @@ module.exports = {
             })
 
             const notifies = await UserNotify.find({toAccount: account._id})
+            const addresses = await Address.find({accountId: account._id})
+
 
             const accountInfo = {
                 id: account._id,
@@ -183,7 +186,8 @@ module.exports = {
                 productReads,
                 productFavorites,
                 productComments,
-                notifies
+                notifies,
+                addresses
             }
 
             const accessToken = jwt.sign({accountId: account._id}, process.env.ACCESS_TOKEN_SECRET)
@@ -233,6 +237,7 @@ module.exports = {
                 const productReads = await ProductReaded.find({accountId})
                 const productSaveForLates = await ProductSaveForLate.find({accountId})
                 const notifies = await UserNotify.find({toAccount: accountId, status: true})
+                const addresses = await Address.find({accountId})
 
                 const accountInfo =  {
                     username: account.username,
@@ -245,7 +250,8 @@ module.exports = {
                     productReads,
                     productFavorites,
                     productComments,
-                    notifies
+                    notifies,
+                    addresses
                 }
 
                 return res.json({

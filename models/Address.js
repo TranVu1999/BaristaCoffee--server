@@ -2,6 +2,12 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const AddressSchema = new Schema ({
+    fullname: {
+        type: String,
+        maxLength: 50,
+        required: true
+    },
+
     company: {
         type: String,
         maxLength: 50
@@ -19,7 +25,7 @@ const AddressSchema = new Schema ({
         required: true
     },
 
-    wards: {
+    ward: {
         type: String,
         maxLength: 50,
         required: true
@@ -42,9 +48,9 @@ const AddressSchema = new Schema ({
         default: true
     },
 
-    userId: {
+    accountId: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "Account"
     }
 })
 

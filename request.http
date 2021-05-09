@@ -68,7 +68,7 @@ POST http://localhost:5000/api/auth/check-logged
 Content-Type: application/json
 
 {
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg"
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2RmZmQwNTUyNjM0NjRkZGQ0OTIiLCJpYXQiOjE2MjA0ODA3NjF9._zxnQyzROscn8Z7pYvJtLDd3Rmcanp-3_mvu0MVvXU8"
 }
 
 
@@ -233,4 +233,26 @@ Content-Type: application/json
     "key": ["Coffee", "Con Heo Dat"],
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg",
     "productId": "6079c0a9f33d0f08b42015f4"
+}
+
+
+# ===========================================================================
+# ADDRESS
+
+
+###
+// add new address
+POST http://localhost:5000/api/address/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2RmZmQwNTUyNjM0NjRkZGQ0OTIiLCJpYXQiOjE2MTk5MjI5MzZ9.yPHFkqlqnkp7CnZ8cbbXX2ecmiqbxWLuLcD0oYJni8w
+
+{
+    "fullname": "Trần Lê Anh Vũ",
+    "company": "",
+    "province": "Hồ Chí Minh",
+    "district": "Quận 9",
+    "ward": "Tăng Nhơn Phú A",
+    "houseNumber": "156b, Lã Xuân Oai",
+    "phoneNumber": "0377670509",
+    "isDefault": true
 }
