@@ -15,6 +15,7 @@ const prodCateRouter = require('./routes/productCategoy');
 const prodRouter = require('./routes/product');
 const keyMapRouter = require('./routes/keyMap');
 const addressRouter = require('./routes/address');
+const invoiceRouter = require('./routes/invoice');
 
 const connectDB = async () =>{
     try {
@@ -64,6 +65,7 @@ app.use('/api/product-category', prodCateRouter);
 app.use('/api/product', prodRouter);
 app.use('/api/key-map', keyMapRouter);
 app.use('/api/address', addressRouter);
+app.use('/api/invoice', invoiceRouter);
 
 let member = {
     id: '',

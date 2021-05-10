@@ -256,3 +256,35 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2M
     "phoneNumber": "0377670509",
     "isDefault": true
 }
+
+
+# ===========================================================================
+# INVOICE
+###
+// add new invoice
+POST http://localhost:5000/api/invoice
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2RmZmQwNTUyNjM0NjRkZGQ0OTIiLCJpYXQiOjE2MTk5MjI5MzZ9.yPHFkqlqnkp7CnZ8cbbXX2ecmiqbxWLuLcD0oYJni8w
+
+{
+    "fullname": "Trần Lê Anh Vũ",
+    "company": "",
+    "province": "Hồ Chí Minh",
+    "district": "Quận 9",
+    "ward": "Tăng Nhơn Phú A",
+    "houseNumber": "156b, Lã Xuân Oai",
+    "phoneNumber": "0377670509",
+    "total": 18000,
+    "listProduct": [
+        {
+            "productId": "60791775f21fc857b4db7d45",
+            "amount": 1,
+            "total": 32000
+        },
+        {
+            "productId": "6079bf84f33d0f08b42015ee",
+            "amount": 1,
+            "total": 46000
+        }
+    ]
+}

@@ -2,8 +2,38 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const InvoiceSchema = new Schema({
-    chargeShip: {
-        type: Number,
+    fullname: {
+        type: String,
+        maxLength: 50,
+        required: true
+    },
+
+    company: {
+        type: String,
+        maxLength: 50
+    },
+
+    province: {
+        type: String,
+        maxLength: 50,
+        required: true
+    },
+
+    district: {
+        type: String,
+        maxLength: 50,
+        required: true
+    },
+
+    ward: {
+        type: String,
+        maxLength: 50,
+        required: true
+    },
+
+    houseNumber: {
+        type: String,
+        maxLength: 50,
         required: true
     },
 
@@ -12,19 +42,13 @@ const InvoiceSchema = new Schema({
         maxLength: 15,
         required: true
     },
-
-    fullname: {
-        type: String,
-        maxLength: 50,
-        required: true
+    
+    chargeShip: {
+        type: Number,
+        default: 14000
     },
 
-    addressId: {
-        type: Schema.Types.ObjectId,
-        ref: Address
-    },
-
-    isNew: {
+    new: {
         type: Boolean,
         default: true
     },
@@ -33,17 +57,11 @@ const InvoiceSchema = new Schema({
         type: Number,
         required: true
     },
-
-    email: {
-        type: String,
-        maxLength: 50,
-        required: true
-    },
     
     orderSituation: {
         type: String,
         enum: ["Complete", "Pending", "Transporting", "Cancel"],
-        default: "Prending"
+        default: "Pending"
     },
 
     createdDate: {
