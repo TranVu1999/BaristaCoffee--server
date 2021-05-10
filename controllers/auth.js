@@ -11,6 +11,9 @@ const ProductFavorited = require('./../models/ProductFavorited')
 const ProductReaded = require('./../models/ProductReaded')
 const ProductSaveForLate = require('./../models/ProductSaveForLate')
 const UserNotify = require('./../models/UserNotify')
+const Invoice = require('./../models/Invoice')
+const InvoiceDetail = require('./../models/InvoiceDetail')
+const Product = require('./../models/Product')
 
 module.exports = {
 
@@ -238,6 +241,27 @@ module.exports = {
                 const productSaveForLates = await ProductSaveForLate.find({accountId})
                 const notifies = await UserNotify.find({toAccount: accountId, status: true})
                 const addresses = await Address.find({accountId})
+                const invoices = await Invoice.find({createdBy: accountId}).lean()
+                const Products = await Product.find().lean()
+                const InvoiceDetails = await InvoiceDetail.find().lean()
+                console.log({InvoiceDetails})
+
+                // set product in invoice
+                const lengthInvoice = invoices.length
+                
+                for(let i = 0; i < lengthInvoice; i++){
+                    let listProduct = InvoiceDetails.filter(item => item.invoiceId.toString() === invoices[i]._id.toString())
+
+                    let lengthProduct = listProduct.length
+                    for(let j = 0; j < lengthProduct; j++){
+                        let product = Products.filter(item => item._id.toString() === listProduct[j].productId.toString())[0]
+
+                        listProduct[j]["title"] = product.title
+                    }
+
+                    invoices[i]["listProduct"] = [...listProduct]
+                }
+
 
                 const accountInfo =  {
                     username: account.username,
@@ -251,7 +275,8 @@ module.exports = {
                     productFavorites,
                     productComments,
                     notifies,
-                    addresses
+                    addresses,
+                    invoices
                 }
 
                 return res.json({
