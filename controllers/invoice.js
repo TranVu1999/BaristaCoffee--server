@@ -1,6 +1,7 @@
 const Invoice = require('../models/Invoice')
 const InvoiceDetail = require('../models/InvoiceDetail')
 const Product = require('../models/Product')
+const UserNotify = require('../models/UserNotify')
 
 module.exports = {
 
@@ -85,10 +86,52 @@ module.exports = {
                 
             }
 
+            let newNotify = null
+            
+            newNotify = new UserNotify({
+                typeNotify: "invoice",
+                toAccount: accountId,
+                content: "CoffeeShop gửi lời cám ơn chân thành vì quý khách đã tin tưởng sử dụng dịch vụ của chúng tôi. Hóa đơn của bạn sẽ được xử lý trong vài ngày tới."
+            })
+            
+            await newNotify.save()
+
             res.json({
                 success: true, 
                 message: "Your operation is done successfully.",
-                newInvoice: newInvoiceRes
+                newInvoice: newInvoiceRes,
+                notify: newNotify
+            })          
+
+        } catch (error) {
+            console.log(error)
+            res
+            .status(500)
+            .json({
+                success: false,
+                message: "Internal server error"
+            })
+        }
+    },
+
+    getDetail: async function(req, res){
+        const invoiceId = req.params.id
+
+        try {   
+            const invoice = await Invoice.findOne({_id: invoiceId})
+
+            if(invoice){                
+                return res.json({
+                    success: true, 
+                    message: "Your operation is done successfully.",
+                    invoice
+                }) 
+            }
+
+
+            res.json({
+                success: false, 
+                message: "Your invoice is not found."
             })          
 
         } catch (error) {

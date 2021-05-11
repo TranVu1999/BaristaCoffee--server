@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const UserNotifySchema = new Schema({
     typeNotify: {
         type: String,
-        enum: ["invoice", "system", "promotion"]
+        enum: ["invoice", "system", "promotion", "cancel"]
     },
 
     new: {

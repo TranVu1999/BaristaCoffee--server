@@ -283,3 +283,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2M
         }
     ]
 }
+
+###
+// get invoice detail
+get http://localhost:5000/api/invoice/609a879637ee565b9898cc9b
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2RmZmQwNTUyNjM0NjRkZGQ0OTIiLCJpYXQiOjE2MTk5MjI5MzZ9.yPHFkqlqnkp7CnZ8cbbXX2ecmiqbxWLuLcD0oYJni8w
