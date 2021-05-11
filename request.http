@@ -280,11 +280,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2M
             "productId": "60791775f21fc857b4db7d45",
             "amount": 1,
             "total": 32000
-        },
-        {
-            "productId": "6079bf84f33d0f08b42015ee",
-            "amount": 1,
-            "total": 46000
         }
     ]
 }

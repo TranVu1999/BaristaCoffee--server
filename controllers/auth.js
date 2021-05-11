@@ -244,7 +244,6 @@ module.exports = {
                 const invoices = await Invoice.find({createdBy: accountId}).lean()
                 const Products = await Product.find().lean()
                 const InvoiceDetails = await InvoiceDetail.find().lean()
-                console.log({InvoiceDetails})
 
                 // set product in invoice
                 const lengthInvoice = invoices.length
