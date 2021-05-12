@@ -68,9 +68,24 @@ POST http://localhost:5000/api/auth/check-logged
 Content-Type: application/json
 
 {
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2RmZmQwNTUyNjM0NjRkZGQ0OTIiLCJpYXQiOjE2MjA0ODA3NjF9._zxnQyzROscn8Z7pYvJtLDd3Rmcanp-3_mvu0MVvXU8"
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg"
 }
 
+# Add product to drop by of account
+###
+POST http://localhost:5000/api/auth/drop-by/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg
+
+{
+    "productId": "60791775f21fc857b4db7d45"
+}
+
+
+
+
+# ===========================================================================
+# STORE
 
 ###
 POST http://localhost:5000/api/store/register
@@ -194,7 +209,7 @@ Content-Type: application/json
 
 # Get product detail
 ###
-GET http://localhost:5000/api/product/detail/tea-cup%20barista
+GET http://localhost:5000/api/product/detail/coffee-pot
 
 # Comment product
 ###

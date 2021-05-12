@@ -35,6 +35,11 @@ router.post('/check-logged', authController.checkLogged)
 // @access Public
 router.post('/verify', authController.verify)
 
+// @route POST api/auth/drop-by
+// @desc Add new product to dropby product
+// @access Private
+router.post('/drop-by', verifyToken, authController.dropByProduct)
+
 // @route POST api/auth/check-username
 // @desc check username is existed
 // @access Public

@@ -237,7 +237,7 @@ module.exports = {
                 const user = await User.findOne({accountId})
                 const productComments = await ProductCommented.find({accountId})
                 const productFavorites = await ProductFavorited.find({accountId})
-                const productReads = await ProductReaded.find({accountId})
+                const productReads_DB = await ProductReaded.find({accountId})
                 const productSaveForLates = await ProductSaveForLate.find({accountId})
                 const notifies = await UserNotify.find({toAccount: accountId, status: true})
                 const addresses = await Address.find({accountId})
@@ -245,9 +245,12 @@ module.exports = {
                 const Products = await Product.find().lean()
                 const InvoiceDetails = await InvoiceDetail.find().lean()
 
+                // list product of account
+                let productPurchased = []
+                let productReads = []
+
                 // set product in invoice
                 const lengthInvoice = invoices.length
-                
                 for(let i = 0; i < lengthInvoice; i++){
                     let listProduct = InvoiceDetails.filter(item => item.invoiceId.toString() === invoices[i]._id.toString())
 
@@ -255,10 +258,25 @@ module.exports = {
                     for(let j = 0; j < lengthProduct; j++){
                         let product = Products.filter(item => item._id.toString() === listProduct[j].productId.toString())[0]
 
+                        productPurchased.push(product)
                         listProduct[j]["title"] = product.title
                     }
 
                     invoices[i]["listProduct"] = [...listProduct]
+                }
+
+                // set product in readed
+                const lengthProductRead = productReads_DB.length
+                for(let i = 0; i < lengthProductRead; i++){
+
+                    let product = Products.filter(item => item._id.toString() === productReads_DB[i].productId.toString())[0]
+
+                    if(product){
+                        productReads.push({
+                            ...product,
+                            newAccount: productReads_DB[i].new
+                        })
+                    }
                 }
 
 
@@ -275,7 +293,8 @@ module.exports = {
                     productComments,
                     notifies,
                     addresses,
-                    invoices
+                    invoices, 
+                    productPurchased
                 }
 
                 return res.json({
@@ -409,5 +428,56 @@ module.exports = {
                 message: "Internal server error"
             })
         }
+    },
+
+    /**
+    * Drop by product
+    */
+    dropByProduct: async function(req, res){
+                
+        try {
+            const {productId} = req.body
+            const {accountId} = req
+
+            const product = await Product.findOne({_id: productId}).lean()
+
+            if(product){
+                const filterProductReaded = {productId, accountId}
+                const productReaded = await ProductReaded.findOne(filterProductReaded)
+
+                // check exist in list product readed of account
+                if(productReaded){
+                    await Product.findOneAndUpdate(filterProductReaded, {new: true});
+                }else{
+                    const newProductReaded = new ProductReaded({
+                        productId,
+                        accountId
+                    })
+                    await newProductReaded.save()
+                }
+
+                const productUpdate = await Product.findOneAndUpdate({_id: productId}, {view: product.view + 1}).lean();
+
+                return res.json({
+                    success: true,
+                    message: "Your action is done successfully",
+                    product: {...productUpdate, newAccount: true}
+                })
+            }
+            
+            res.json({
+                success: false,
+                message: "This product is not found"
+            })
+        } catch (error) {
+            console.log(error)
+            res
+            .status(500)
+            .json({
+                success: false,
+                message: "Internal server error"
+            })
+        }
     }
+
 }
