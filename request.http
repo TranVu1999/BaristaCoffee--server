@@ -73,15 +73,31 @@ Content-Type: application/json
 
 # Add product to drop by of account
 ###
-POST http://localhost:5000/api/auth/drop-by/
+POST http://localhost:5000/api/product/drop-by
+Content-Type: application/json
+
+{
+    "productId": "60791775f21fc857b4db7d45",
+    "accessToken": ""
+}
+
+
+# remove product of account
+###
+DELETE  http://localhost:5000/api/auth/remove-product/readed/607bba7f4e6b2e20b0c45736
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg
+
+
+# update new property of list invoice
+###
+PUT http://localhost:5000/api/auth/drop-by-list-invoice
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MDcxY2UyN2QwNTUyNjM0NjRkZGQ0OTQiLCJpYXQiOjE2MTgyOTYzNDN9.nPUynIn8YHmC5peBxJq0rYc88B3S-tJB6Fgi41lhLPg
 
 {
-    "productId": "60791775f21fc857b4db7d45"
+    "listInvoice" : ["609a879637ee565b9898cc9b"]
 }
-
-
 
 
 # ===========================================================================
@@ -203,7 +219,7 @@ Content-Type: application/json
     "perPage": 10,
     "sortBy": "Sort by popularity",
     "productCategory": "All",
-    "keySearch": ""
+    "keySearch": "Coffee"
 }
 
 

@@ -15,6 +15,17 @@ const Invoice = require('./../models/Invoice')
 const InvoiceDetail = require('./../models/InvoiceDetail')
 const Product = require('./../models/Product')
 
+const showErrorSystem = function(res, error){
+    console.log(error)
+    return res
+    .status(500)
+    .json({
+        success: false,
+        message: "Internal server error"
+    })
+}
+
+
 module.exports = {
 
     /**
@@ -431,52 +442,64 @@ module.exports = {
     },
 
     /**
-    * Drop by product
+    * Remove product of account
     */
-    dropByProduct: async function(req, res){
-                
+    removeProduct: async function(req, res){
         try {
-            const {productId} = req.body
             const {accountId} = req
+            const {title, productId} = req.params
 
-            const product = await Product.findOne({_id: productId}).lean()
+            const account = await Account.findOne({_id: accountId})
 
-            if(product){
-                const filterProductReaded = {productId, accountId}
-                const productReaded = await ProductReaded.findOne(filterProductReaded)
+            if(account){
 
-                // check exist in list product readed of account
-                if(productReaded){
-                    await Product.findOneAndUpdate(filterProductReaded, {new: true});
-                }else{
-                    const newProductReaded = new ProductReaded({
-                        productId,
-                        accountId
-                    })
-                    await newProductReaded.save()
+                let product = null
+                switch(title){
+                    case "readed":
+                        product = await ProductReaded.findOneAndDelete({productId})
+                        break
+                    default:
+                        break
                 }
 
-                const productUpdate = await Product.findOneAndUpdate({_id: productId}, {view: product.view + 1}).lean();
+                if(!product){
+                    return res.json({
+                        success: false,
+                        message: "This product is not found",
+                    })
+                }
 
                 return res.json({
                     success: true,
-                    message: "Your action is done successfully",
-                    product: {...productUpdate, newAccount: true}
+                    message: "This product has been successfully deleted",
+                    product
                 })
+                
             }
-            
+
             res.json({
                 success: false,
-                message: "This product is not found"
+                message: "This account is not found"
             })
         } catch (error) {
-            console.log(error)
-            res
-            .status(500)
-            .json({
+            showErrorSystem(res, error)
+        }
+    },
+
+
+    /**
+    *   update new property of list invoice
+    */
+    updateListInvoice: async function(req, res){
+        try {
+            const {accountId} = req
+
+            res.json({
                 success: false,
-                message: "Internal server error"
+                message: "Your operation is done successfully"
             })
+        } catch (error) {
+            showErrorSystem(res, error)
         }
     }
 

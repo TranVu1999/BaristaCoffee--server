@@ -4,7 +4,24 @@ const Product = require('./../models/Product')
 const ProductRate = require('./../models/ProductRate')
 const ProductCategory = require('./../models/ProductCategory')
 const ProductSale = require('./../models/ProductSale')
+const ProductReaded = require('./../models/ProductReaded')
 const KeyMap = require('./../models/KeyMap')
+const Notify = require('./../helpers/const')
+const jwt = require('jsonwebtoken')
+
+const showErrorSystem = function(res, error){
+    console.log(error)
+    return res
+    .status(500)
+    .json({
+        success: false,
+        message: "Internal server error"
+    })
+}
+
+const returnForClient = function(res, status, data){
+    return res.status(status).json(data)
+}
 
 const sortByScore = function (listProduct, listStore){
     // update score
@@ -135,15 +152,57 @@ const filterProductByProductCategory = function (listProduct, productCategoryId)
 
 module.exports = {
     /**
+    * Drop by product
+    */
+     dropBy: async function(req, res){
+                
+        try {
+            const {productId, accessToken} = req.body
+            const accountId = accessToken && jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET).accountId || "" 
+            console.log({accountId})
+
+            const product = await Product.findOne({_id: productId}).lean()
+
+            if(product){
+                const filterProductReaded = accountId ? {productId, accountId} : {productId}
+                const productReaded = await ProductReaded.findOne(filterProductReaded)
+
+                // check exist in list product readed of account
+                if(productReaded){
+                    await Product.findOneAndUpdate(filterProductReaded, {new: true});
+                }else{
+                    const newProductReaded = new ProductReaded({
+                        productId,
+                        accountId
+                    })
+                    await newProductReaded.save()
+                }
+
+                const productUpdate = await Product.findOneAndUpdate({_id: productId}, {view: product.view + 1}).lean();
+
+                return res.json({
+                    success: true,
+                    message: "Your action is done successfully",
+                    product: {...productUpdate, newAccount: true}
+                })
+            }
+            
+            res.json({
+                success: false,
+                message: "This product is not found"
+            })
+        } catch (error) {
+            showErrorSystem(res, error)
+        }
+    },
+
+    /**
      * Add new comment product
      */
     addComment: async function(req, res){
         const {
-            rating, 
-            comment, 
-            productId, 
-            author,
-            toUser
+            rating, comment, productId, 
+            author, toUser
         } = req.body
 
         try {
@@ -152,11 +211,8 @@ module.exports = {
                 const product = await Product.findOne({_id: productId})
 
                 const newRate = new ProductRate({
-                    rating,
-                    comment,
-                    productId,
-                    author,
-                    toUser,
+                    rating, comment,
+                    productId, author, toUser,
                     createdBy: req.accountId
                 })
 
@@ -188,13 +244,7 @@ module.exports = {
             })
             
         } catch (error) {
-            console.log(error)
-            res
-            .status(500)
-            .json({
-                success: false,
-                message: "Internal server error"
-            })
+            showErrorSystem(res, error)
         }
     },
 
@@ -204,21 +254,9 @@ module.exports = {
     addNew: async function(req, res){
         const {accountId} = req
         const {
-            avatar,
-            moreImage,
-            title,
-            alias,
-            productCategoryId,
-            price,
-            shortDescription,
-            detail,
-            sku,
-            keySearch,
-            height, 
-            weight,
-            length,
-            width,
-            listSale
+            avatar, moreImage, title, alias, productCategoryId,
+            price, shortDescription, detail, sku, keySearch, 
+            height, weight, length, width, listSale
         } = req.body
 
         try {
@@ -244,20 +282,12 @@ module.exports = {
 
             // All good
             const newProduct = new Product ({
-                avatar,
-                title,
-                moreImage,
-                alias,
-                productCategoryId,
-                price,
-                shortDescription,
-                detail,
-                sku,
-                keySearch,
+                avatar, title, moreImage,
+                alias, productCategoryId, price,
+                shortDescription, detail,
+                sku, keySearch,
                 createdBy: accountId,
-                height, 
-                weight,
-                length,
+                height, weight, length,
                 width
             })
             newProduct.save()
@@ -288,13 +318,7 @@ module.exports = {
             })
             
         } catch (error) {
-            console.log(error)
-            res
-            .status(500)
-            .json({
-                success: false,
-                message: "Internal server error"
-            })
+            showErrorSystem(res, error)
         }
         
     },
@@ -304,11 +328,8 @@ module.exports = {
      */
     filter: async function(req, res){
         const {
-            perPage,
-            page,
-            sortBy,
-            productCategory,
-            keySearch
+            perPage, page, sortBy, 
+            productCategory, keySearch
         } = req.body
 
         try {
@@ -328,8 +349,7 @@ module.exports = {
 
             if(productCategory !== "All"){
                 const prodCate= await ProductCategory.findOne({title: productCategory}).lean()
-                listProduct = filterProductByProductCategory(listProduct, prodCate._id)
-                
+                listProduct = filterProductByProductCategory(listProduct, prodCate._id)                
             }
             
             if(sortBy === "Sort by popularity"){
@@ -337,7 +357,6 @@ module.exports = {
                 listProduct = sortByScore(listProduct, listStore)
             }else{
                 listProduct = sortByType(listProduct, sortBy)
-
             }
 
             if(!listProduct){
@@ -347,6 +366,8 @@ module.exports = {
                     success: false,
                     message: "Cannot get list product"
                 })
+
+                
             }
             
             const startIndex = (page - 1) * perPage
@@ -363,26 +384,17 @@ module.exports = {
 
                 tempListProduct[i] = {...tempListProduct[i], listSale}
             }
-
-            console.log(listProduct.length)
             
-            res.json({
+            const data = {
                 success: true, 
-                message: "Your operation is done successfully",
+                message: Notify.SUCCESS_ACTIVE(),
                 sizeList: listProduct.length,
-                listProduct: tempListProduct,
-                
-            })
-            
+                listProduct: tempListProduct
+            }
+            return returnForClient(res, 200, data)
             
         } catch (error) {
-            console.log(error)
-            res
-            .status(500)
-            .json({
-                success: false,
-                message: "Internal server error"
-            })
+            showErrorSystem(res, error)
         }
         
     },
@@ -402,13 +414,7 @@ module.exports = {
             
             
         } catch (error) {
-            console.log(error)
-            res
-            .status(500)
-            .json({
-                success: false,
-                message: "Internal server error"
-            })
+            showErrorSystem(res, error)
         }
     },
 
@@ -416,8 +422,7 @@ module.exports = {
      * Get product infomation 
      */
     getProductInfomation: async function(req, res){
-        const {alias} = req.params
-        
+        const {alias} = req.params        
 
         try {
             const listProduct = await Product.find().lean()
@@ -426,18 +431,16 @@ module.exports = {
             let product = listProduct.filter(item => item.alias === alias)[0]
 
             if(!product){
-                res
-                .status(400)
-                .json({
+                const data = {
                     success: false, 
                     message: "This product is not found"
-                })
+                }
+                return returnForClient(res, 400, data)
             }
 
             let productCategory = await ProductCategory.findOne({_id: product.productCategoryId}).lean()
 
             let comment = await ProductRate.find({productId: product._id}).lean()
-
             
             // get list product relative
             // get list key of product
@@ -460,11 +463,10 @@ module.exports = {
 
             // get store info
             const store = listStore.find(item => item.createdBy.toString() === product.createdBy.toString())
-            
 
-            res.json({
+            const data = {
                 success: true, 
-                message: "Your operation is done successfully",
+                message: Notify.SUCCESS_ACTIVE(),
                 product: {
                     ...product, 
                     productCategory: productCategory.title,
@@ -472,20 +474,12 @@ module.exports = {
                     listRelativeProduct: listRelativeProduct.slice(0, 4)
                 },
                 store
+            }
+            return returnForClient(res, 200, data)
 
-            })
-            
-            
         } catch (error) {
-            console.log(error)
-            res
-            .status(500)
-            .json({
-                success: false,
-                message: "Internal server error"
-            })
+            showErrorSystem(res, error)
         }
     },
-
 
 }

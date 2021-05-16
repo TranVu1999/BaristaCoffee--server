@@ -35,14 +35,26 @@ router.post('/check-logged', authController.checkLogged)
 // @access Public
 router.post('/verify', authController.verify)
 
-// @route POST api/auth/drop-by
-// @desc Add new product to dropby product
-// @access Private
-router.post('/drop-by', verifyToken, authController.dropByProduct)
-
 // @route POST api/auth/check-username
 // @desc check username is existed
 // @access Public
 router.post('/check-username', authController.checkUsername)
+
+
+// =================================== PUT ================================
+
+// @route update api/auth/drop-by-list-invoice
+// @desc update new property of list invoice
+// @access Private
+router.put('/drop-by-list-invoice', verifyToken, authController.updateListInvoice)
+
+
+
+// DELETE
+
+// @route DELETE api/auth/remove-product
+// @desc remove product of account
+// @access Private
+router.delete('/remove-product/:title/:productId', verifyToken, authController.removeProduct)
 
 module.exports = router;
